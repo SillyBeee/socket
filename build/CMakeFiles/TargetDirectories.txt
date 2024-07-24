@@ -1,0 +1,3 @@
+/home/ma/socket/build/CMakeFiles/client.dir
+/home/ma/socket/build/CMakeFiles/edit_cache.dir
+/home/ma/socket/build/CMakeFiles/rebuild_cache.dir
