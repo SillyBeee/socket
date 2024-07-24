@@ -116,3 +116,8 @@ std::string convertcenterToString(const loc& odom) {
        << odom.G.roll << "," << odom.G.pitch << "," << odom.G.yaw << ")";
     return ss.str();
 }
+std::string predict_msg(int x,int y,int z){
+    std::stringstream ss;
+    ss << "predict center:(" << x << "," << y << "," << z <<  ")";
+    return ss.str();
+}

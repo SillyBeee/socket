@@ -11,7 +11,7 @@ using namespace armor;
 class armor_dectectors{
     public:
     VectorXd x;
-    MatrixXd P, F, H, R, Q;
+    MatrixXd P, F, H, RI, Q;
     double sum=0;
     loc rotate_g_c;loc rotate_g_s; loc rotate_o_g;
     cv::Mat pretvec,prervec;
@@ -19,10 +19,9 @@ class armor_dectectors{
     string model_path = "model/mlp.onnx";
     string label_path = "model/label.txt";
     int count=0;
-    VectorXd measurement=VectorXd::Zero(3);
     int armor_dectector(Mat frame,int dest_socket,Mat cameraMatrix,Mat distCoeffs){
         armor::NumberClassifier number_classifier(model_path, label_path, 0.5);
-        // initializeKalmanFilter(x, P, F, H, R, Q);
+        initializeKalmanFilter(x, P, F, H, RI, Q);
         count++;
         Mat framecopy;
         frame.copyTo(framecopy);
@@ -45,11 +44,6 @@ class armor_dectectors{
             number_classifier.Classify(armorlist);
             for (int j=0;j<armorlist.size();j++ ){//每帧进行遍历，当结果不为nagative时，输出结果
                 if (strncmp(armorlist[j].classification_result.c_str(), "negative", 8) != 0){
-                    // predict(x, P, F, Q);//卡尔曼预测阶段
-                    measurement<<tvecs[j].at<double>(0, 0), tvecs[j].at<double>(0,1), tvecs[j].at<double>(0,2) ;
-                    if (measurement.norm() != 0) {  //卡尔曼更新阶段
-                        // update(x, P, H, R, measurement);
-                    }  
                     // std::cout<<"revc:("<<rvecs[j].at<double>(0,0)<<","<<rvecs[j].at<double>(1,0)<<","<<rvecs[j].at<double>(2,0)<<")"<<std::endl;
                     std::cout<<"第"<<count<<"帧:"<<armorlist[j].classification_result<<" ";  //输出识别结果
                     cv::Mat R;Rodrigues(rvecs[j],R); Mat aular(3,1,CV_16F);aular=rotationMatrixToEulerAnglesMat(R);//将camera下的rvecs转换为欧拉角
@@ -61,9 +55,19 @@ class armor_dectectors{
                     cv::Mat rmat = cv::Mat::zeros(1, 3, CV_64F);rmat.at<double>(0, 0) = odom.G.roll;rmat.at<double>(0, 1) = odom.G.pitch;rmat.at<double>(0, 2) = odom.G.yaw;
                     if (preflag==1&& abs(count-last_frame)<=53  && abs(count-last_frame)>0){
                         loc result=calculate_revolve_center(tmat,rmat,pretvec,prervec,count,last_frame,rotate_g_c,rotate_o_g,framecopy);//需要调整
-                        std::string resultstr=convertcenterToString(result);send_txt_msg(dest_socket,resultstr);
-                        pretvec=tmat;prervec=rmat;
-                        last_frame=count;
+                        if (result.P.x!=0){  //向服务器输出结果
+                            predict(x, P, F, Q);//卡尔曼预测阶段
+                            VectorXd measurement=VectorXd::Zero(3);
+                            measurement<<result.P.x,result.P.y,result.P.z;
+                            if (measurement.norm() != 0) {  //卡尔曼更新阶段
+                                update(x, P, H, RI, measurement);
+                                std::string predictstr=predict_msg(x[0],x[1],x[2]);send_txt_msg(dest_socket,predictstr);//发送预测信息
+                            }  
+                            // std::string resultstr=convertcenterToString(result);send_txt_msg(dest_socket,resultstr);
+                            pretvec=tmat;prervec=rmat;
+                            last_frame=count;
+                        }
+                        
                         // imshow("framecpy",framecopy);
                     }
                     else if (preflag==0){
