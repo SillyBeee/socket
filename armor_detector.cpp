@@ -63,6 +63,7 @@ class armor_dectectors{
                         loc result=calculate_revolve_center(tmat,rmat,pretvec,prervec,count,last_frame,rotate_g_c,rotate_o_g,framecopy);//需要调整
                         std::string resultstr=convertcenterToString(result);send_txt_msg(dest_socket,resultstr);
                         pretvec=tmat;prervec=rmat;
+                        last_frame=count;
                         // imshow("framecpy",framecopy);
                     }
                     else if (preflag==0){

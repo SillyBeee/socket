@@ -199,11 +199,16 @@ loc calculate_revolve_center(const Mat& tvec1, const Mat& rvec1, const Mat& tvec
     vector<double> angular_velocity=calculate_Angular_velocity(rvec1, rvec2, time1, time2);
     double norm_linear=norm(linear_velocity);double norm_angular=norm(angular_velocity);
     double r=norm_linear/norm_angular;
-    std::cout<<"r is "<<r<<std::endl;
-    loc center=armor2odom(r,tvec2,rvec2,rotate_g_c,rotate_o_g);
-    std::cout<<"center is("<<center.P.x<<","<<center.P.y<<","<<center.P.z<<")"<<std::endl;
-    // circle(image,Point(center.P.x,center.P.y),5,Scalar(0,0,255),-1);
-    return center;
+    if (r>0.1&&r<1.3){
+        std::cout<<"r is "<<r<<std::endl;
+        loc center=armor2odom(r,tvec2,rvec2,rotate_g_c,rotate_o_g);
+        std::cout<<"center is("<<center.P.x<<","<<center.P.y<<","<<center.P.z<<")"<<std::endl;
+        // circle(image,Point(center.P.x,center.P.y),5,Scalar(0,0,255),-1);
+        return center;
+    }
+    loc null;
+    return null;
+    
 }
 
 
