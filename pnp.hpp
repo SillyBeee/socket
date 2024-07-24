@@ -136,7 +136,7 @@ std::vector<vector<cv::Point2f>> Find_angle_points(cv::Mat img) {     //寻找�
     // cv::imshow("result", image);
     return result;
 }
-
+//pnp解算
 void pnpsolver(vector<Point2f> pixelVector,vector<cv::Mat> &tvecs,vector<cv::Mat> &rvecs,Mat camera_matrix,Mat dist_coeffs){//pnp解算函数，输入四个角点，返回tvec,rvec
     const float SMALL_ARMOR_WIDTH  = 0.135;
     const float SMALL_ARMOR_HEIGHT = 0.055;
@@ -183,6 +183,7 @@ vector<double> calculate_linear_velocity(Mat tvec1,Mat tvec2,int time1,int time2
     velocity.push_back(delta_z/delta_time);
     return velocity;
 }
+//计算角速度函数
 vector<double> calculate_Angular_velocity(Mat rvec1,Mat rvec2,int time1,int time2){
     int delta_time = time2 - time1;
     double delta_roll = rvec2.at<double>(0, 1) - rvec1.at<double>(0, 1);
@@ -194,6 +195,7 @@ vector<double> calculate_Angular_velocity(Mat rvec1,Mat rvec2,int time1,int time
     velocity.push_back(delta_yaw/delta_time);
     return velocity;
 }
+//计算旋转中心函数
 loc calculate_revolve_center(const Mat& tvec1, const Mat& rvec1, const Mat& tvec2, const Mat& rvec2,int time1,int time2,loc rotate_g_c,loc rotate_o_g,Mat image){
     vector<double> linear_velocity=calculate_linear_velocity(tvec1, tvec2, time1, time2);
     vector<double> angular_velocity=calculate_Angular_velocity(rvec1, rvec2, time1, time2);

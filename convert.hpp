@@ -66,7 +66,7 @@ loc camera_to_odom (Mat &tvecs , Mat &rvecs , loc rotate_g_c , loc rotate_g_s,lo
         
         
 }
-void getstatic(loc &rotate_g_c,loc &rotate_g_s,loc &rotate_o_g){
+void getstatic(loc &rotate_g_c,loc &rotate_g_s,loc &rotate_o_g){  //获取静态参数
     // cout<<"请输入gimbal到camera的位姿变化"<<endl;
     // scanf("%lf %lf %lf %lf %lf %lf",&rotate_g_c.P.x,&rotate_g_c.P.y,&rotate_g_c.P.z,&rotate_g_c.G.yaw,&rotate_g_c.G.pitch,&rotate_g_c.G.roll);
     // cout<<"请输入gimbal到shooter的位姿变化"<<endl;
@@ -91,7 +91,7 @@ loc armor2odom(double r,Mat tvecs,Mat rvecs,loc rotate_g_c,loc rotate_o_g){
     return odom;
 }   
 
-cv::Mat rotationMatrixToEulerAnglesMat(const cv::Mat &R) {
+cv::Mat rotationMatrixToEulerAnglesMat(const cv::Mat &R) {    //旋转矩阵转欧拉角
     float sy = std::sqrt(R.at<double>(0, 0) * R.at<double>(0, 0) + R.at<double>(1, 0) * R.at<double>(1, 0));
     
     bool singular = sy < 1e-6; // 如果 sy 接近于零，则矩阵接近奇异
@@ -110,13 +110,13 @@ cv::Mat rotationMatrixToEulerAnglesMat(const cv::Mat &R) {
     cv::Mat eulerAngles = (cv::Mat_<double>(3, 1) << x, y, z);
     return eulerAngles;
 }
-std::string convertcenterToString(const loc& odom) {
+std::string convertcenterToString(const loc& odom) {  //将给定的loc类型转为字符串输出
     std::stringstream ss;
     ss << "center:(" << odom.P.x << "," << odom.P.y << "," << odom.P.z << ","
        << odom.G.roll << "," << odom.G.pitch << "," << odom.G.yaw << ")";
     return ss.str();
 }
-std::string predict_msg(int x,int y,int z){
+std::string predict_msg(int x,int y,int z){   //发送预测值
     std::stringstream ss;
     ss << "predict center:(" << x << "," << y << "," << z <<  ")";
     return ss.str();
