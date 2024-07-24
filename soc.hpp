@@ -80,7 +80,7 @@ unsigned char* Application::receive_and_decode(MessageBuffer& message) {
     }
 }
 
-void deserializeMessage(unsigned char* buffer, MessageBuffer& message) {
+void deserializeMessage(unsigned char* buffer, MessageBuffer& message) {  //赋值函数
     memcpy(&message.Start, buffer, sizeof(message.Start));
     memcpy(&message.MessageType, buffer + 2, sizeof(message.MessageType));
     memcpy(&message.DataID, buffer + 4, sizeof(message.DataID));
@@ -93,7 +93,7 @@ void deserializeMessage(unsigned char* buffer, MessageBuffer& message) {
 std::string Application::handle_string_msg(MessageBuffer& buffer) {
     return std::string(reinterpret_cast<char*>(buffer.Data), buffer.DataLenth);
 }
-loc receive_transform_data(MessageBuffer buffer){
+loc receive_transform_data(MessageBuffer buffer){  //接收变换数据函数
     double translation[3];double rotation[4];loc dst;
     memcpy(translation, buffer.Data, sizeof(translation));
     memcpy(rotation, buffer.Data + sizeof(translation), sizeof(rotation));
@@ -102,7 +102,7 @@ loc receive_transform_data(MessageBuffer buffer){
     dst.G=convert_to_gesture(dst.Q);
     return dst;
 }
-void send_transform_request(int client_socket){
+void send_transform_request(int client_socket){  //发送变换请求函数
     MessageBuffer buffer;
     buffer.MessageType=0x1982;buffer.DataTotalLenth=buffer.DataLenth=sizeof(buffer.Data);
     char gimbal[]="Gimbal";
@@ -126,7 +126,7 @@ void send_transform_request(int client_socket){
 }
     
 
-void send_txt_msg(int client_socket,std::string msg){
+void send_txt_msg(int client_socket,std::string msg){  //发送给定文本函数
     MessageBuffer buffer = {};
         buffer.MessageType = 0x0000;
         buffer.DataID = 0;
@@ -136,7 +136,7 @@ void send_txt_msg(int client_socket,std::string msg){
         memcpy(buffer.Data, msg.c_str(), msg.length());
         send(client_socket, &buffer, sizeof(MessageBuffer), 0);
 }
-void send_txt(int client_socket) {
+void send_txt(int client_socket) {  //手动发送文本函数
     std::string message;
     while (true) {
         std::getline(std::cin, message);
@@ -158,7 +158,7 @@ void send_txt(int client_socket) {
     }
 }
 
-cv::Mat Application::receive_image( MessageBuffer&buffer) {
+cv::Mat Application::receive_image( MessageBuffer&buffer) {  //接受图片函数
     unsigned char *data=receive_and_decode(buffer);
     if (data!=nullptr){
         std::vector<uchar> img_data(data, data + buffer.DataTotalLenth);
@@ -171,7 +171,7 @@ cv::Mat Application::receive_image( MessageBuffer&buffer) {
 
 }
 
-void send_image(const cv::Mat& image, int client_socket) {
+void send_image(const cv::Mat& image, int client_socket) { //发送图片功能
     std::vector<unsigned char> encoded_image;
     cv::imencode(".jpg", image, encoded_image);
     int total_image_size = encoded_image.size();
@@ -197,7 +197,7 @@ void send_image(const cv::Mat& image, int client_socket) {
     }
 }
 
-void receive_all(int client_socket) {
+void receive_all(int client_socket) { //可以接受一切的函数（已弃用）
     std::vector<uchar> combuffer;
     Application app;
     
