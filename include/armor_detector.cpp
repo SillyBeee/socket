@@ -1,7 +1,7 @@
 #include <fstream>
 #include "number_classifier.cpp"
 #include "number_classifier.hpp"
-#include "include/kalman.cpp"
+#include "kalman.cpp"
 #include "soc.hpp"
 #include <chrono>
 #include <cstring>
