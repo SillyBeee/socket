@@ -1,7 +1,0 @@
-[
-{
-  "directory": "/home/ma/socket/build",
-  "command": "/usr/bin/c++  -I/usr/include/eigen3 -isystem /usr/local/include/opencv4 -g -o CMakeFiles/client.dir/client11.cpp.o -c /home/ma/socket/client11.cpp",
-  "file": "/home/ma/socket/client11.cpp"
-}
-]
