@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/ma/socket/client.cpp" "CMakeFiles/client.dir/client.cpp.o" "gcc" "CMakeFiles/client.dir/client.cpp.o.d"
+  "/home/ma/socket/client11.cpp" "CMakeFiles/client.dir/client11.cpp.o" "gcc" "CMakeFiles/client.dir/client11.cpp.o.d"
   )
 
 # Targets to which this target links.

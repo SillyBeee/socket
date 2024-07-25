@@ -1,7 +1,7 @@
 #include <fstream>
 #include "number_classifier.cpp"
 #include "number_classifier.hpp"
-#include "kalman.hpp"
+#include "/home/ma/socket/kalman.cpp"
 #include "soc.hpp"
 #include <chrono>
 #include <cstring>
@@ -10,18 +10,22 @@ using namespace std;
 using namespace armor;
 class armor_dectectors{
     public:
-    VectorXd x;
-    MatrixXd P, F, H, RI, Q;
+    Eigen::VectorXd x;
+    Eigen::MatrixXd P, RI, Q;
     double sum=0;
     loc rotate_g_c;loc rotate_g_s; loc rotate_o_g;
     cv::Mat pretvec,prervec;
     int preflag=0;int last_frame;
-    string model_path = "model/mlp.onnx";
-    string label_path = "model/label.txt";
+    string model_path = "/home/ma/socket/model/mlp.onnx";
+    string label_path = "/home/ma/socket/model/label.txt";
     int count=0;
+    
+    
     int armor_dectector(Mat frame,int dest_socket,Mat cameraMatrix,Mat distCoeffs){
         armor::NumberClassifier number_classifier(model_path, label_path, 0.5);
-        initializeKalmanFilter(x, P, F, H, RI, Q);
+        if (count==0){
+            initializeKalmanFilter(x, P, RI, Q);
+        }
         count++;
         Mat framecopy;
         frame.copyTo(framecopy);
@@ -56,11 +60,12 @@ class armor_dectectors{
                     if (preflag==1&& abs(count-last_frame)<=53  && abs(count-last_frame)>0){
                         loc result=calculate_revolve_center(tmat,rmat,pretvec,prervec,count,last_frame,rotate_g_c,rotate_o_g,framecopy);//需要调整
                         if (result.P.x!=0){  //向服务器输出结果
-                            predict(x, P, F, Q);//卡尔曼预测阶段
-                            VectorXd measurement=VectorXd::Zero(3);
+                            predict(x, P,  Q);//卡尔曼预测阶段
+                            Eigen::VectorXd measurement=Eigen::VectorXd::Zero(3);
                             measurement<<result.P.x,result.P.y,result.P.z;
                             if (measurement.norm() != 0) {  //卡尔曼更新阶段
-                                update(x, P, H, RI, measurement);
+                                update(x, P,  RI, measurement);
+                                std::cout<<"predict"<<x[0]<<x[1]<<x[2]<<std::endl;
                                 std::string predictstr=predict_msg(x[0],x[1],x[2]);send_txt_msg(dest_socket,predictstr);//发送预测信息
                             }  
                             // std::string resultstr=convertcenterToString(result);send_txt_msg(dest_socket,resultstr);

@@ -174,9 +174,9 @@ void pnpsolver(vector<Point2f> pixelVector,vector<cv::Mat> &tvecs,vector<cv::Mat
 //计算线速度
 vector<double> calculate_linear_velocity(Mat tvec1,Mat tvec2,int time1,int time2){
     int delta_time = time2 - time1;
-    double delta_x = tvec2.at<double>(0, 1) - tvec1.at<double>(0, 1);
-    double delta_y= tvec2.at<double>(0, 2) - tvec1.at<double>(0, 2);
-    double delta_z = tvec2.at<double>(0, 3) - tvec1.at<double>(0, 3);
+    double delta_x = abs(tvec2.at<double>(0, 1) - tvec1.at<double>(0, 1));
+    double delta_y= abs(tvec2.at<double>(0, 2) - tvec1.at<double>(0, 2));
+    double delta_z = tabs(vec2.at<double>(0, 3) - tvec1.at<double>(0, 3));
     vector<double> velocity;
     velocity.push_back(delta_x/delta_time);
     velocity.push_back(delta_y/delta_time);
@@ -186,9 +186,9 @@ vector<double> calculate_linear_velocity(Mat tvec1,Mat tvec2,int time1,int time2
 //计算角速度函数
 vector<double> calculate_Angular_velocity(Mat rvec1,Mat rvec2,int time1,int time2){
     int delta_time = time2 - time1;
-    double delta_roll = rvec2.at<double>(0, 1) - rvec1.at<double>(0, 1);
-    double delta_pitch= rvec2.at<double>(0, 2) - rvec1.at<double>(0, 2);
-    double delta_yaw = rvec2.at<double>(0, 3) - rvec1.at<double>(0, 3);
+    double delta_roll = abs(rvec2.at<double>(0, 1) - rvec1.at<double>(0, 1));
+    double delta_pitch= abs(rvec2.at<double>(0, 2) - rvec1.at<double>(0, 2));
+    double delta_yaw = abs(rvec2.at<double>(0, 3) - rvec1.at<double>(0, 3));
     vector<double> velocity;
     velocity.push_back(delta_roll/delta_time);
     velocity.push_back(delta_pitch/delta_time);
