@@ -51,6 +51,7 @@ typedef struct {
 } TransformRequestData;
 #pragma pack()
 
+
 class Application {
     public:
     unsigned char* receive_and_decode(MessageBuffer& message);
@@ -59,7 +60,7 @@ class Application {
     private:
     std::unordered_map<unsigned int, std::vector<unsigned char>> data_temp;
     };
-unsigned char* Application::receive_and_decode(MessageBuffer& message) {
+unsigned char* Application::receive_and_decode(MessageBuffer& message) {    //拼包函数
     unsigned int offset = message.Offset;
     unsigned int length = message.DataLenth;
     unsigned int total_length = message.DataTotalLenth;
@@ -90,7 +91,7 @@ void deserializeMessage(unsigned char* buffer, MessageBuffer& message) {  //赋�
     memcpy(&message.Data, buffer + 20, message.DataLenth);
     memcpy(&message.End, buffer + 20 + message.DataLenth, sizeof(message.End));
 }
-std::string Application::handle_string_msg(MessageBuffer& buffer) {
+std::string Application::handle_string_msg(MessageBuffer& buffer) {    //处理字符串消息
     return std::string(reinterpret_cast<char*>(buffer.Data), buffer.DataLenth);
 }
 loc receive_transform_data(MessageBuffer buffer){  //接收变换数据函数

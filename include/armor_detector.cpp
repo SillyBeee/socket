@@ -10,15 +10,15 @@ using namespace std;
 using namespace armor;
 class armor_dectectors{
     public:
-    Eigen::VectorXd x;
-    Eigen::MatrixXd P, RI, Q;
-    double sum=0;
-    loc rotate_g_c;loc rotate_g_s; loc rotate_o_g;
-    cv::Mat pretvec,prervec;
-    int preflag=0;int last_frame;
+    Eigen::VectorXd x;  // 状态向量
+    Eigen::MatrixXd P, RI, Q;  // 卡尔曼所需等其他变量
+    double sum=0;   //用于计算总时间
+    loc rotate_g_c;loc rotate_g_s; loc rotate_o_g;   //记录坐标系转化时的位姿变化
+    cv::Mat pretvec,prervec;  //用于记录上一帧的位姿
+    int preflag=0;int last_frame;  //prelfag用来记录是否是第一次识别到数字   last_frame用来记录上一次识别到数字的帧数
     string model_path = "/home/ma/socket/model/mlp.onnx";
     string label_path = "/home/ma/socket/model/label.txt";
-    int count=0;
+    int count=0;  //用于记录帧数
     
     
     int armor_dectector(Mat frame,int dest_socket,Mat cameraMatrix,Mat distCoeffs){
