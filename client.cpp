@@ -1,6 +1,10 @@
 #define PORT 4399
 #define BUFFER_SIZE 10240
 #include "armor_detector.cpp"
+
+
+
+//单个服务器端，多个端口是clent11.cpp
 int main() {
     int received_transform_count=0;
     cv::Mat_<double> camera_matrix = cv::Mat_<double>::zeros(3, 3);
