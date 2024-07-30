@@ -91,18 +91,6 @@ class Quarternion{
             q=revolve_yaw(dy)*revolve_pitch(dp)*revolve_roll(dr);
             return q;
         }
-        
-        void revolve_matrix(double(&matrix)[3][3],Quarternion a){
-            matrix[0][0]=1-2*a.j*a.j-2*a.k*a.k;
-            matrix[0][1]=2*a.i*a.j-2*a.k*a.w;
-            matrix[0][2]=2*a.i*a.k+2*a.j*a.w;
-            matrix[1][0]=2*a.i*a.j+2*a.k*a.w;
-            matrix[1][1]=1-2*a.i*a.i-2*a.k*a.k;
-            matrix[1][2]=2*a.j*a.k-2*a.i*a.w;
-            matrix[2][0]=2*a.i*a.k-2*a.j*a.w;
-            matrix[2][1]=2*a.j*a.k+2*a.i*a.w;
-            matrix[2][2]=1-2*a.i*a.i-2*a.j*a.j;
-        }
 
 
         

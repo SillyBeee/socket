@@ -1,5 +1,5 @@
-#include "position_and_gesture.h"
-#include "Quaternion.h"
+#include "position_and_gesture.hpp"
+#include "Quaternion.hpp"
 #include<opencv2/opencv.hpp>
 #include<opencv2/highgui/highgui.hpp>
 using namespace std;

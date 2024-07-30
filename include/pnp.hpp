@@ -176,7 +176,7 @@ vector<double> calculate_linear_velocity(Mat tvec1,Mat tvec2,int time1,int time2
     int delta_time = time2 - time1;
     double delta_x = abs(tvec2.at<double>(0, 1) - tvec1.at<double>(0, 1));
     double delta_y= abs(tvec2.at<double>(0, 2) - tvec1.at<double>(0, 2));
-    double delta_z = tabs(vec2.at<double>(0, 3) - tvec1.at<double>(0, 3));
+    double delta_z = abs(tvec2.at<double>(0, 3) - tvec1.at<double>(0, 3));
     vector<double> velocity;
     velocity.push_back(delta_x/delta_time);
     velocity.push_back(delta_y/delta_time);
