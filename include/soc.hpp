@@ -199,45 +199,7 @@ void send_image(const cv::Mat& image, int client_socket) { //发送图片功能
 }
 
 void receive_all(int client_socket) { //可以接受一切的函数（已弃用）
-    std::vector<uchar> combuffer;
-    Application app;
     
-    while(true){
-        unsigned char recvbuffer[10240]={0};
-        int num=recv(client_socket, recvbuffer,10240-combuffer.size(), 0);
-        if (num==-1){
-            std::cout<<"disconnect";
-            break;
-        }
-        if (num==0){
-            std::cout<<"can not get data";
-            break;
-        }
-        combuffer.insert(combuffer.end(), recvbuffer, recvbuffer+num);
-        while(combuffer.size()>=10240){
-            MessageBuffer buffer;
-            deserializeMessage(combuffer.data(),buffer);
-            size_t messageSize = sizeof(MessageBuffer) - sizeof(buffer.Data) + buffer.DataLenth;
-            if (combuffer.size() < messageSize) {
-                break;
-            }
-            combuffer.clear();
-            if (buffer.MessageType==0x0000){
-                 std::string str = app.handle_string_msg(buffer);
-                std::cout << "Received string message: " << str << std::endl;
-            }
-            else if(buffer.MessageType==0x1145){
-                cv::Mat img=app.receive_image( buffer);
-                if (!img.empty()) {
-                    std::cout<<"get image successfully"<<std::endl;
-                    cv::imshow("Image", img);
-                    cv::waitKey(0);
-                    
-                }
-            }
-
-        }
-    }
 }
 
 
